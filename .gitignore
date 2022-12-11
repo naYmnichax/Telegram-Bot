@@ -1,5 +1,6 @@
-.idea
+.idea/
 *.class
+*.iml
 target
 Bot_Name.txt
 Bot_Token.txt
