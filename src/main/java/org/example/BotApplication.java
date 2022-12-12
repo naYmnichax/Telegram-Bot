@@ -13,6 +13,5 @@ public class BotApplication {
         }catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -12,6 +12,7 @@ public class StartCommand implements Command {
     public final static String START_MESSAGE = "Доброгов времени суток, %s.\n" +
             "Я бот переводчик. И я вам постраюсь помочь в вашей нелёгкой жизне по изучению Английского языка";
     public final static String START_HELP = String.format("%s - повторю ваше собощение как хрюшка-повторюшка", START.getCommandName());
+
     public StartCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
     }
@@ -19,11 +20,12 @@ public class StartCommand implements Command {
     @Override
     public void execute(Update update) {
         final String FirstName = update.getMessage().getChat().getFirstName();
-        final String SecondName = update.getMessage().getChat().getLastName();
-        if(SecondName != null){
-            final String NameUser = FirstName + " " + SecondName;
+        final String LastName = update.getMessage().getChat().getLastName();
+        if (LastName != null) {
+            final String NameUser = FirstName + " " + LastName;
             sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format(START_MESSAGE, NameUser));
+        } else {
+            sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format(START_MESSAGE, FirstName));
         }
-        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format(START_MESSAGE, FirstName));
     }
 }
