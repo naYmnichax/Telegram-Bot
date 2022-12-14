@@ -31,7 +31,7 @@ public class EchoCommandTest {
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId.toString());
-        sendMessage.setText(String.format(ECHO_MESSAGE, " Привет, Амиго!"));
+        sendMessage.setText(String.format(ECHO_MESSAGE, "Привет, Амиго!"));
         sendMessage.enableHtml(true);
 
         EchoCommand echoCommand = new EchoCommand(sendBotMessageService);

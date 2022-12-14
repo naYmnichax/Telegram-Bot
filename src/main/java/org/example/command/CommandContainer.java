@@ -17,6 +17,8 @@ public class CommandContainer {
                 .put(ABOUT.getCommandName(), new AboutCommand(sendBotMessageService))
                 .put(NO.getCommandName(), new NoCommand(sendBotMessageService))
                 .put(ECHO.getCommandName(), new EchoCommand(sendBotMessageService))
+                .put(TRANSLATE.getCommandName(), new TranslateCommand(sendBotMessageService))
+                .put(SUPPORTED_LANGUAGES.getCommandName(), new SupLangCommand(sendBotMessageService))
                 .build();
 
         unknownCommand = new UnknownCommand(sendBotMessageService);

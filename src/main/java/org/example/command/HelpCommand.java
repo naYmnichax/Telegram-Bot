@@ -18,12 +18,14 @@ public class HelpCommand implements Command{
             + "%s - получить помощь в работе со мной\n"
             + "%s - получить информацию обо мне\n"
             + "%s - повторю ваше собощение как хрюшка-повторюшка\n"
-            + "%s - переведу написанное слово/фразу\n",
+            + "%s - переведу слово/фразу/предложение написанную вами\n"
+            + "%s - выведет поддерживаемые языки",
             START.getCommandName(),
             HELP.getCommandName(),
             ABOUT.getCommandName(),
             ECHO.getCommandName(),
-            TRANSLATE.getCommandName());
+            TRANSLATE.getCommandName(),
+            SUPPORTED_LANGUAGES.getCommandName());
 
     public HelpCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
@@ -38,8 +40,7 @@ public class HelpCommand implements Command{
                 final String HELP_COMMAND = new GetHelpForCommand().getHelp(words[1]);
                 sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), HELP_COMMAND);
             }
-        }
-        else {
+        } else {
             sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), HELP_MESSAGE);
         }
     }

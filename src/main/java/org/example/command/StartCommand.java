@@ -9,9 +9,9 @@ public class StartCommand implements Command {
 
     private final SendBotMessageService sendBotMessageService;
 
-    public final static String START_MESSAGE = "Доброгов времени суток, %s.\n" +
+    public final static String START_MESSAGE = "Здравствуйте, %s.\n" +
             "Я бот переводчик. И я вам постраюсь помочь в вашей нелёгкой жизне по изучению Английского языка";
-    public final static String START_HELP = String.format("%s - повторю ваше собощение как хрюшка-повторюшка", START.getCommandName());
+    public final static String START_HELP = String.format("%s - начать работу со мной", START.getCommandName());
 
     public StartCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

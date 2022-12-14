@@ -4,8 +4,6 @@ import org.example.service.SendBotMessageService;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Arrays;
-
 import static org.example.command.CommandName.ECHO;
 
 public class EchoCommand implements Command {
@@ -28,8 +26,11 @@ public class EchoCommand implements Command {
             final String EMPTY_MESSAGE = "Вы ничего не написали.\n Напишите команду /help";
             sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), EMPTY_MESSAGE);
         } else {
-            for (int i = 1; i < words.length; ++i) {
-                answer.append(" ").append(words[i]);
+            for(int i = 1; i < words.length; ++i) {
+                answer.append(words[i]);
+                if(i != words.length-1) {
+                    answer.append(" ");
+                }
             }
             sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format(ECHO_MESSAGE, answer));
         }
