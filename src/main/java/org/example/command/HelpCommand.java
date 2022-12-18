@@ -17,13 +17,17 @@ public class HelpCommand implements Command{
             + "%s - получить информацию обо мне\n"
             + "%s - повторю ваше собощение как хрюшка-повторюшка\n"
             + "%s - переведу слово/фразу/предложение написанную вами\n"
-            + "%s - выведет поддерживаемые языки",
+            + "%s - выведет поддерживаемые языки\n"
+            + "%s - выдам случайные русские слова которые вы должны перевести и отправить обратно\n"
+            + "%s - проверяю ваш перевод слов которые вы получили из /random_text",
             START.getCommandName(),
             HELP.getCommandName(),
             ABOUT.getCommandName(),
             ECHO.getCommandName(),
             TRANSLATE.getCommandName(),
-            SUPPORTED_LANGUAGES.getCommandName());
+            SUPPORTED_LANGUAGES.getCommandName(),
+            RND_TEXT.getCommandName(),
+            TEXT_CHECK.getCommandName());
 
     public HelpCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
