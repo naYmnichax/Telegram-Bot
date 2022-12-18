@@ -6,11 +6,11 @@ import static org.example.command.CommandName.START;
 
 
 public class StartCommand implements Command {
-
     private final SendBotMessageService sendBotMessageService;
 
-    public final static String START_MESSAGE = "Здравствуйте, %s.\n" +
-            "Я бот переводчик. И я вам постраюсь помочь в вашей нелёгкой жизне по изучению Английского языка";
+    public final static String START_MESSAGE = "Здравствуйте, %s.\n"
+            + "Я бот переводчик. И я вам постраюсь помочь в вашей нелёгкой жизне по изучению иностранного языка.\n"
+            + "Пожалуйста напишите /help чтобы ознакомится с доступными командами.";
     public final static String START_HELP = String.format("%s - начать работу со мной", START.getCommandName());
 
     public StartCommand(SendBotMessageService sendBotMessageService) {
@@ -19,6 +19,7 @@ public class StartCommand implements Command {
 
     @Override
     public void execute(Update update) {
+        
         final String FirstName = update.getMessage().getChat().getFirstName();
         final String LastName = update.getMessage().getChat().getLastName();
         if (LastName != null) {

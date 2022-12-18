@@ -23,7 +23,7 @@ public class EchoCommand implements Command {
         Message message = update.getMessage();
         String[] words = message.getText().trim().split(" ");
         if (words.length == 1) {
-            final String EMPTY_MESSAGE = "Вы ничего не написали.\n Напишите команду /help";
+            final String EMPTY_MESSAGE = "Вы ничего не написали.\nПожалуйста напишите команду /help чтобы узнать доступные команды.";
             sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), EMPTY_MESSAGE);
         } else {
             for(int i = 1; i < words.length; ++i) {

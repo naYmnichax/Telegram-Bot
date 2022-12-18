@@ -7,7 +7,8 @@ public enum CommandName {
     ECHO("/echo"),
     NO("nocommand"),
     TRANSLATE("/translate"),
-    SUPPORTED_LANGUAGES("/supplang");
+    SUPPORTED_LANGUAGES("/supplang"),
+    MAILING_LIST("mailing_list");
 
     private final String commandName;
 

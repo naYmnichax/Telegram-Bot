@@ -5,8 +5,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static org.example.command.CommandName.*;
 
-
-
 public class HelpCommand implements Command{
 
     private final SendBotMessageService sendBotMessageService;

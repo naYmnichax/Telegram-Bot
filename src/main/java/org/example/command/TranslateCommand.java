@@ -1,22 +1,28 @@
 package org.example.command;
 
 import lombok.SneakyThrows;
-import org.example.translateAPI.SupportedLanguages;
-import org.example.translateAPI.Translator;
+import org.example.button.ButtonForTranslateCommand;
 import org.example.service.SendBotMessageService;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.example.translateAPI.Translator;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
 
 import static org.example.command.CommandName.*;
 
-
-public class TranslateCommand implements Command{
+public class TranslateCommand implements Command {
 
     private final SendBotMessageService sendBotMessageService;
 
-    public final static String TRANSLATE_MESSAGE = "Ваше переведённая фараза/предложение: \"%s\"";
+    private static short history = 0;
+    private static String LANGUAGE_FROM;
+    private static String LANGUAGE_TO;
 
-    public final static String TRANSLATE_HELP = String.format("Формат ввода: \"%s [язык на котором написаны слова] [язык на который нужно перевести слова] [слова/фразы/предложения которые надо перевести]\"", TRANSLATE.getCommandName());
+
+    public final static String TRANSLATE_MESSAGE = "Ваше переведённая слово/фраза/предложение: \"%s\"";
+
+    public final static String TRANSLATE_HELP = String.format("%s - данная команда поможет вам перевети нужное вам слово/фразу/преложение.", TRANSLATE.getCommandName());
 
     public TranslateCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
@@ -25,35 +31,78 @@ public class TranslateCommand implements Command{
     @SneakyThrows
     @Override
     public void execute(Update update) {
-        StringBuilder sentence = new StringBuilder();
-        Message message = update.getMessage();
-        String[] text = message.getText().trim().split(" ");
-        if(text.length <= 3) {
-            sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format("Вы ввели пустое собщение. Напишите пожалуйста:\"%s %s\"",
-                    HELP.getCommandName(),
-                    TRANSLATE.getCommandName()));
+
+        if (history == 0){
+
+            history++;
+
+            SendMessage message = new SendMessage();
+            String text = "Выберите язык, с которого хотете перевести слово/фразу/предложение.";
+
+            ButtonForTranslateCommand button = new ButtonForTranslateCommand();
+            button.createButtonLanguageFrom(message);
+
+            sendBotMessageService.sendMessageForCommandTranslate(message, update.getMessage().getChatId().toString(), text);
+
+        } else if (history == 1) {
+            history++;
+
+            String callbackData = update.getCallbackQuery().getData();
+            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            EditMessageText message = new EditMessageText();
+            String text = "Выберите язык, на который хотите перевести слово/фразу/предложения.";
+
+            LANGUAGE_FROM = languageFrom(callbackData);
+
+            ButtonForTranslateCommand button = new ButtonForTranslateCommand();
+            button.createButtonLanguageTo(message);
+
+            sendBotMessageService.sendMessageForButtonCommandTranslate(message, chatId, messageId, text);
+
+        } else if (history == 2) {
+            history++;
+
+            String callbackData = update.getCallbackQuery().getData();
+            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            EditMessageText message = new EditMessageText();
+            String text = "Напишите слово/фразу/предложение которое хотите перевести.";
+
+            LANGUAGE_TO = languageTo(callbackData);
+
+            sendBotMessageService.sendMessageForButtonCommandTranslate(message, chatId, messageId, text);
+
         } else {
-            String langFrom = text[1];
-            String langTo = text[2];
+            history = 0;
 
-            SupportedLanguages supportedLanguages = new SupportedLanguages();
-            if(!supportedLanguages.checkLanguages(langFrom, langTo) ) {
-                sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format("Введённый вами язык не поддерживается.\nНапишите пожалуйста:\n\"%s %s\" или \"%s\"",
-                        HELP.getCommandName(),
-                        TRANSLATE.getCommandName(),
-                        SUPPORTED_LANGUAGES.getCommandName()));
-            } else {
-                for(int i = 3; i < text.length; ++i) {
-                    sentence.append(text[i]);
-                    if(i != text.length-1) {
-                        sentence.append(" ");
-                    }
-                }
-                Translator translator = new Translator();
+            Translator translator = new Translator();
+            String textTranslate = String.format(TRANSLATE_MESSAGE, translator.translate(LANGUAGE_FROM, LANGUAGE_TO, update.getMessage().getText().trim()));
 
-                String translateSentence = translator.translate(langFrom, langTo, String.valueOf(sentence));
-                sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.format(TRANSLATE_MESSAGE,translateSentence));
-            }
+            sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), textTranslate);
         }
+
+    }
+
+    private static String languageFrom(String callBackData) {
+        return switch (callBackData) {
+            case "LanguageFrom_EN" -> "en";
+            case "LanguageFrom_DE" -> "de";
+            case "LanguageFrom_RU" -> "ru";
+            case "LanguageFrom_KZ" -> "kk";
+            default -> null;
+        };
+    }
+
+    private static String languageTo(String callBackData) {
+        return switch (callBackData) {
+            case "LanguageTo_EN" -> "en";
+            case "LanguageTo_DE" -> "de";
+            case "LanguageTo_RU" -> "ru";
+            case "LanguageTo_KZ" -> "kk";
+            default -> null;
+        };
     }
 }

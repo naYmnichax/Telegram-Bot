@@ -1,5 +1,6 @@
 package org.example.command;
 
+import com.vdurmont.emoji.EmojiParser;
 import org.example.translateAPI.SupportedLanguages;
 import org.example.service.SendBotMessageService;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,9 +10,12 @@ import static org.example.command.CommandName.SUPPORTED_LANGUAGES;
 public class SupLangCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
 
-    public final static String  SUPP_LANG_MESSAGE = "<b>Поддерживаемые языки:</b>\n\n%s";
+    public final static String  SUPP_LANG_MESSAGE = EmojiParser.parseToUnicode(":de:")
+            + " <b>Поддерживаемые языки</b> "
+            + EmojiParser.parseToUnicode(":ru:")
+            + "\n\n%s";
 
-    public final static String SUPP_LANG_HELP = String.format("%s - выведет поддерживаемые языки", SUPPORTED_LANGUAGES.getCommandName());
+    public final static String SUPP_LANG_HELP = String.format("%s - выведет список языков, которые поддердиваются ботом.", SUPPORTED_LANGUAGES.getCommandName());
 
     public SupLangCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

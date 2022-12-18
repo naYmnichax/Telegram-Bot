@@ -1,7 +1,6 @@
 package org.exapmle.command;
 
 import org.example.TelegramBot.DrDarkness;
-import org.example.command.StartCommand;
 import org.example.command.TranslateCommand;
 import org.example.service.SendBotMessageService;
 import org.example.service.SendBotMessageServiceImpl;
