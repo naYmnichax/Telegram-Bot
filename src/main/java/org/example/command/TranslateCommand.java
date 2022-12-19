@@ -22,7 +22,7 @@ public class TranslateCommand implements Command {
 
     public final static String TRANSLATE_MESSAGE = "Ваше переведённая слово/фраза/предложение: \"%s\"";
 
-    public final static String TRANSLATE_HELP = String.format("%s - данная команда поможет вам перевети нужное вам слово/фразу/преложение.", TRANSLATE.getCommandName());
+    public final static String TRANSLATE_HELP = String.format("%s - данная команда поможет вам перевести нужное вам слово/фразу/преложение.", TRANSLATE.getCommandName());
 
     public TranslateCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

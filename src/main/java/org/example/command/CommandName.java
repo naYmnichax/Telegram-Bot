@@ -8,7 +8,9 @@ public enum CommandName {
     NO("nocommand"),
     TRANSLATE("/translate"),
     SUPPORTED_LANGUAGES("/supplang"),
-    MAILING_LIST("mailing_list");
+    MAILING_LIST("mailing_list"),
+    RND_TEXT("/random_text"),
+    TEXT_CHECK("/text_check");
 
     private final String commandName;
 
