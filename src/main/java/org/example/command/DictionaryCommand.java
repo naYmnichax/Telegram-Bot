@@ -65,7 +65,6 @@ public class DictionaryCommand implements Command {
         Collections.shuffle(rawWordsList); // перемешиваем
         var wordsList = rawWordsList.subList(0,count);  //берём 20 слов
         wordsUsers.put(userId, wordsList);//добовляем их в словарь чтобы потом проверить
-        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.join(", ",wordsList));
 
         if(mTimer != null){
             mTimer.cancel();
@@ -75,6 +74,7 @@ public class DictionaryCommand implements Command {
         mTimer = new Timer();
         mTimer.schedule(reminder(),120000);
 
+        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), String.join(", ",wordsList));
         sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(),"Отправте ваш ответ в виде: команда язык слова через пробел; через команду /text_check в соответствии с полученными словами");
     }
 

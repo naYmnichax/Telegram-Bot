@@ -17,6 +17,28 @@ public class DictionaryCommandTest {
     protected SendBotMessageService sendBotMessageService = new SendBotMessageServiceImpl(drDarkness);
 
     @Test
+    public void CheckInputIsEmptyDictionaryCommand() throws TelegramApiException{
+        Long chatId = 1234567824356L;
+
+        Update update = new Update();
+        Message message = Mockito.mock(Message.class);
+        Mockito.when(message.getChatId()).thenReturn(chatId);
+        Mockito.when(message.getText()).thenReturn("/random_text");
+        update.setMessage(message);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId.toString());
+        sendMessage.setText("Введите число от 1 до 20");
+        sendMessage.enableHtml(true);
+
+        DictionaryCommand dictionaryCommand = new DictionaryCommand(sendBotMessageService);
+        dictionaryCommand.execute(update);
+
+        Mockito.verify(drDarkness).execute(sendMessage);
+    }
+
+
+    @Test
     public void CheckInputDictionaryCommand() throws TelegramApiException{
         Long chatId = 1234567824356L;
 
