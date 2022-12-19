@@ -1,5 +1,6 @@
 package org.example.command;
 
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import org.example.button.ButtonForTranslateCommand;
 import org.example.service.SendBotMessageService;
@@ -21,7 +22,7 @@ public class TranslateCommand implements Command {
 
     private Timer mTimer = new Timer();
 
-    private static short history = 0;
+    public static short history = 0;
     private static String LANGUAGE_FROM;
     private static String LANGUAGE_TO;
 
@@ -138,11 +139,14 @@ public class TranslateCommand implements Command {
                 String[] chatId = data.split(" ");
 
                 String message = "";
-                if(mailing.hasNextLine()) {
-                    message = mailing.nextLine();
+                while (mailing.hasNextLine()) {
+                    message += mailing.nextLine();
+                    if(mailing.hasNextLine()){
+                        message += "\n";
+                    }
                 }
 
-                sendBotMessageService.sendMessage(chatId[0],message);
+                sendBotMessageService.sendMessage(chatId[0],message + " " + EmojiParser.parseToUnicode(":face_with_monocle:"));
                 mTimer.cancel();
             }
         };

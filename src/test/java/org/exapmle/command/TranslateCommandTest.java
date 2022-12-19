@@ -11,13 +11,11 @@ import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static org.example.command.CommandName.START;
-import static org.example.command.TranslateCommand.TRANSLATE_MESSAGE;
+import static org.example.command.TranslateCommand.history;
 
 @DisplayName("Unit-level testing for TranslateCommand")
 public class TranslateCommandTest {
@@ -27,6 +25,7 @@ public class TranslateCommandTest {
     @Test
     public void  checkFirsStageCommand() throws TelegramApiException {
         Long chatId = 1234567824356L;
+        history = 0;
 
         Update update = new Update();
         Message message = Mockito.mock(Message.class);
@@ -52,22 +51,20 @@ public class TranslateCommandTest {
     public void  checkSecondStageCommand() throws TelegramApiException {
         Long chatId = 1234567824356L;
         long messageId = 123456243L;
-
-        Chat chat = new Chat();
-        chat.setId(chatId);
-
-
+        history = 1;
 
         Update update = new Update();
-        Message message = new Message();
-        message.setChat(chat);
-        message.setMessageId((int) messageId);
-
+        Message message = Mockito.mock(Message.class);
         CallbackQuery callbackQuery = Mockito.mock(CallbackQuery.class);
-        Mockito.when(callbackQuery.getMessage()).thenReturn(message);
-        Mockito.when(callbackQuery.getMessage().getChatId()).thenReturn(chatId);
-        Mockito.when(callbackQuery.getMessage().getMessageId()).thenReturn((int) messageId);
+
+        Mockito.when(message.getChatId()).thenReturn(chatId);
+        Mockito.when(message.getMessageId()).thenReturn((int) messageId);
+        Mockito.doReturn(message).when(callbackQuery).getMessage();
+        Mockito.doReturn("LanguageFrom_EN").when(callbackQuery).getData();
+
+        update.setCallbackQuery(callbackQuery);
         update.setEditedMessage(message);
+
 
         EditMessageText Message = new EditMessageText();
         Message.setChatId(chatId.toString());
@@ -76,6 +73,36 @@ public class TranslateCommandTest {
 
         ButtonForTranslateCommand button = new ButtonForTranslateCommand();
         button.createButtonLanguageTo(Message);
+
+        TranslateCommand translateCommand = new TranslateCommand(sendBotMessageService);
+        translateCommand.execute(update);
+
+        Mockito.verify(drDarkness).execute(Message);
+    }
+
+    @Test
+    public void  checkThirdStageCommand() throws TelegramApiException {
+        Long chatId = 1234567824356L;
+        long messageId = 123456243L;
+        history = 2;
+
+        Update update = new Update();
+        Message message = Mockito.mock(Message.class);
+        CallbackQuery callbackQuery = Mockito.mock(CallbackQuery.class);
+
+        Mockito.when(message.getChatId()).thenReturn(chatId);
+        Mockito.when(message.getMessageId()).thenReturn((int) messageId);
+        Mockito.doReturn(message).when(callbackQuery).getMessage();
+        Mockito.doReturn("LanguageTo_RU").when(callbackQuery).getData();
+
+        update.setCallbackQuery(callbackQuery);
+        update.setEditedMessage(message);
+
+
+        EditMessageText Message = new EditMessageText();
+        Message.setChatId(chatId.toString());
+        Message.setMessageId((int) messageId);
+        Message.setText("Напишите слово/фразу/предложение которое хотите перевести.");
 
         TranslateCommand translateCommand = new TranslateCommand(sendBotMessageService);
         translateCommand.execute(update);
