@@ -19,7 +19,6 @@ public class CommandContainer {
                 .put(ECHO.getCommandName(), new EchoCommand(sendBotMessageService))
                 .put(TRANSLATE.getCommandName(), new TranslateCommand(sendBotMessageService))
                 .put(SUPPORTED_LANGUAGES.getCommandName(), new SupLangCommand(sendBotMessageService))
-                .put(MAILING_LIST.getCommandName(), new MailingListCommand(sendBotMessageService))
                 .put(RND_TEXT.getCommandName(), new DictionaryCommand(sendBotMessageService))
                 .put(TEXT_CHECK.getCommandName(), new TextCheckCommand(sendBotMessageService))
                 .build();

@@ -6,8 +6,6 @@ import org.example.command.CommandContainer;
 import static org.example.command.CommandName.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.example.service.SendBotMessageServiceImpl;
@@ -20,8 +18,6 @@ import java.sql.Timestamp;
 import java.util.Scanner;
 
 @Component
-@Configuration
-@EnableScheduling
 public class DrDarkness extends TelegramLongPollingBot {
     private static final String BOT_NAME = new InfoBot().getInfo("Bot_Name.txt");
     private static final String BOT_TOKEN = new InfoBot().getInfo("Bot_Token.txt");

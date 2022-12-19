@@ -17,7 +17,7 @@ public class TextCheckCommand implements Command {
     @SneakyThrows
     @Override
     public void execute(Update update){
-        String[] received_message = update.getMessage().toString().split(" "); //принимаем сообщение команда язык слова
+        String[] received_message = update.getMessage().getText().split(" "); //принимаем сообщение команда язык слова
         var userId = update.getMessage().getChatId();
         var len = received_message.length - 2;//сколько всех слов без 2 ненужных(команда и язык)
         var language = received_message[1]; //язык перевода

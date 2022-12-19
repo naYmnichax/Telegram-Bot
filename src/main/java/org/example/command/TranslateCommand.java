@@ -8,12 +8,18 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.io.File;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static org.example.command.CommandName.*;
 
 public class TranslateCommand implements Command {
 
     private final SendBotMessageService sendBotMessageService;
+
+    private Timer mTimer = new Timer();
 
     private static short history = 0;
     private static String LANGUAGE_FROM;
@@ -78,6 +84,14 @@ public class TranslateCommand implements Command {
         } else {
             history = 0;
 
+            if(mTimer != null){
+                mTimer.cancel();
+                mTimer.purge();
+
+            }
+            mTimer = new Timer();
+            mTimer.schedule(reminder(),120000);
+
             Translator translator = new Translator();
             String textTranslate = String.format(TRANSLATE_MESSAGE, translator.translate(LANGUAGE_FROM, LANGUAGE_TO, update.getMessage().getText().trim()));
 
@@ -103,6 +117,34 @@ public class TranslateCommand implements Command {
             case "LanguageTo_RU" -> "ru";
             case "LanguageTo_KZ" -> "kk";
             default -> null;
+        };
+    }
+
+    private TimerTask reminder() {
+        return new TimerTask() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                File usersData = new File("TelegramUsers");
+                File mailing_list = new File("Mailing TranslateCommand");
+
+                Scanner user = new Scanner(usersData);
+                Scanner mailing = new Scanner(mailing_list);
+
+                String data = "";
+                if(user.hasNextLine()){
+                    data = user.nextLine();
+                }
+                String[] chatId = data.split(" ");
+
+                String message = "";
+                if(mailing.hasNextLine()) {
+                    message = mailing.nextLine();
+                }
+
+                sendBotMessageService.sendMessage(chatId[0],message);
+                mTimer.cancel();
+            }
         };
     }
 }
