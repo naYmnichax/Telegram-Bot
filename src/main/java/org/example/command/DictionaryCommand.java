@@ -75,11 +75,14 @@ public class DictionaryCommand implements Command {
                 String[] chatId = data.split(" ");
 
                 String message = "";
-                if(mailing.hasNextLine()) {
-                    message = mailing.nextLine();
+                while (mailing.hasNextLine()) {
+                    message += mailing.nextLine();
+                    if(mailing.hasNextLine()){
+                        message += "\n";
+                    }
                 }
 
-                sendBotMessageService.sendMessage(chatId[0],message + " " + EmojiParser.parseToUnicode(":monocle_face:"));
+                sendBotMessageService.sendMessage(chatId[0],message + " " + EmojiParser.parseToUnicode(":face_with_monocle:"));
                 mTimer.cancel();
             }
         };
