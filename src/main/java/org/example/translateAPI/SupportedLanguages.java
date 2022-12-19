@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SupportedLanguages {
-    public Map<String, String> supportedLanguages = new HashMap<>();
+    public static Map<String, String> supportedLanguages = new HashMap<>();
 
-    public boolean checkLanguages(String langFrom, String langTo){
-        return supportedLanguages.containsKey(langFrom) && supportedLanguages.containsKey(langTo);
+    public static boolean checkLanguages(String langFrom){
+        return supportedLanguages.containsKey(langFrom);
     }
     public SupportedLanguages(){
         supportedLanguages.put("en","Английский");

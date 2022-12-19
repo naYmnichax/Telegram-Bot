@@ -9,12 +9,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.*;
 import java.util.*;
 
+import static org.example.command.CommandName.TEXT_CHECK;
+
 public class DictionaryCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
 
     private Timer mTimer = new Timer();
 
+
     public static HashMap<Long, List<String>> wordsUsers = new HashMap<>();//здесь будут храниться слова пользователей чтобы сравнивать их перевод
+    public final static String TEXT_HELP = String.format("%s данная команда принимает данные в виде язык слова через пробел\nдля примера:/text_check en bed cat mouse house",TEXT_CHECK.getCommandName());
 
     public DictionaryCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
@@ -24,8 +28,25 @@ public class DictionaryCommand implements Command {
     public void execute(Update update){
         Message message = update.getMessage();
         String[] received_message = message.getText().split(" "); //принимаем сообщение
-        var userId= update.getMessage().getChatId();
-        int count = Integer.parseInt(received_message[1]);  // количество рандомных слов
+        var userId= message.getChatId();
+        int count;
+        String number;
+
+        if (received_message.length>1) {
+            number = received_message[1];  //Проверка на пустую /text_check
+        }
+        else {
+            sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), "Введите число от 1 до 20");
+            return;
+        }
+
+        if(Character.isDigit(number.charAt(0)) && Character.isDigit(number.charAt(1)) && number.length()<3){
+            count = Integer.parseInt(number);  // количество рандомных слов
+        }                    //проверка на то что у нас от 1 до 20 и это цифра
+        else {
+            sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), "Введите число от 1 до 20, а не другой символ.");
+            return;
+        }
 
         String file = "dictionary";// задаем имя файла
         List<String> rawWordsList = new ArrayList<>();     //  создаём массив для слов
@@ -54,7 +75,7 @@ public class DictionaryCommand implements Command {
         mTimer = new Timer();
         mTimer.schedule(reminder(),120000);
 
-        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(),"Отправте ваш ответ через команду /text_check в соответствии с полученными словами");
+        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(),"Отправте ваш ответ в виде: команда язык слова через пробел; через команду /text_check в соответствии с полученными словами");
     }
 
     private TimerTask reminder() {
