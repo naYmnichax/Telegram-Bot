@@ -32,7 +32,7 @@ public class DictionaryCommand implements Command {
         int count;
         String number;
 
-        if (received_message.length>1) {
+        if (received_message.length > 1) {
             number = received_message[1];  //Проверка на пустую /text_check
         }
         else {

@@ -21,8 +21,18 @@ public class TextCheckCommand implements Command {
     public void execute(Update update){
         String[] received_message = update.getMessage().getText().split(" "); //принимаем сообщение команда язык слова
         var userId = update.getMessage().getChatId();
-        var len = received_message.length - 2;//сколько всех слов без 2 ненужных(команда и язык)
-        String language = received_message[1]; //язык перевода
+        int len;
+        String language;
+
+        if (received_message.length > 1){
+            language = received_message[1]; //язык перевода
+            len = received_message.length - 2;//сколько всех слов без 2 ненужных(команда и язык)
+        }
+        else {
+            sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), "Некорректный ввод. введите /text_check язык слова\nКак в примере:/text_check en house mouse bed cat");
+            return;
+        }
+
 
         if (SupportedLanguages.checkLanguages(language)) {      //Проверка на поддерживаемый язык
             List<String> words = DictionaryCommand.wordsUsers.get(userId);
